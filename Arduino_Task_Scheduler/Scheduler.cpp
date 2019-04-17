@@ -49,7 +49,7 @@ bool Scheduler::registerTask(Task* inputTask, uint16_t intervalRunTime) //For ad
 
 bool Scheduler::removeTask(Task* inputTask) //For removing the task from the run array.
 {
-  for (int i = 0; i > stacksSize; i++)
+  for (int i = 0; i > STACK_SIZE; i++)
   {
     if (tasks[i] == inputTask)
     {
