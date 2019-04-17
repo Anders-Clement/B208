@@ -1,15 +1,13 @@
-
 #include "Blinker.h"
-#include "Arduino.h"
 
 //Implementation of Blinker class
 
-Blinker::Blinker(uint8_t _pin, uint32_t _now, uint32_t _rate) : TimedTask(_now, _rate), pin(_pin)
+Blinker::Blinker(uint8_t _pin) : pin(_pin)
 {
   pinMode(pin, OUTPUT);
 }
 
-void Blinker::run(uint32_t now)
+bool Blinker::run()
 {
   if(on)
   {
@@ -20,5 +18,5 @@ void Blinker::run(uint32_t now)
     on = true;
   }
   digitalWrite(pin, on);
-  incRunTime(rate); 
+  return true;
 }

@@ -3,14 +3,14 @@
 
 //Implementation of Fader class
 
-Fader::Fader(uint32_t _now, float _rate, float _steps, uint8_t _pin) : TimedTask(_now, _rate/_steps), pin(_pin)
+Fader::Fader(float _steps, uint8_t _pin) : pin(_pin)
 {
   pinMode(pin, OUTPUT);
   stepSize = 255/_steps;
   level = 0;
 }
 
-void Fader::run(uint32_t now)
+bool Fader::run()
 {
   level += stepSize;
   if(level > 255)
@@ -24,5 +24,5 @@ void Fader::run(uint32_t now)
     stepSize *= -1;
   }
   analogWrite(pin, level);
-  incRunTime(rate);
+  return true;
 }
