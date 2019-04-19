@@ -3,11 +3,15 @@
 
 #include "Task.h"
 #include "Arduino.h"
+#include "Talker.h"
 
 class WheelLight : public Task
 {
+private:
+    Transmitter * RGBStateInHere;
 public:
-    WheelLight();
+    WheelLight(Transmitter *incoming);
+    virtual bool run();
 };
 
 #endif

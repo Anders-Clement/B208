@@ -1,11 +1,12 @@
 #include "Arduino.h"
 #include "Talker.h"
+#include "IMUAngle.h"
 
-Transmitter::Transmitter()
+Transmitter::Transmitter(IMUAngle *angleClass)
 {
     driver = new RH_ASK(2000, 12, 11, 0);
     manager = new RHReliableDatagram(*driver, SERVER_ADDRESS);
-    
+    linkToAngler = angleClass;
     if (!(manager->init()))
     {
         Serial.println("Transmitter Server Failed to initilize");
@@ -14,6 +15,7 @@ Transmitter::Transmitter()
 
 bool Transmitter::run()
 {
+    data[0] = (uint8_t)linkToAngler->CurrentAngle;
     if (manager->available())
     {
         // Wait for a message addressed to us from the client
