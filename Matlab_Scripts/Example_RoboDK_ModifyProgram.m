@@ -3,6 +3,17 @@ clc
 clear
 close all
 
+%% Connection to the robot
+
+% Get the robot ip from the teach pendant: File -> About
+robot_ip = '192.168.0.79';
+
+sock = tcpip(robot_ip, 30000, 'NetworkRole', 'server');
+fclose(sock);
+disp('Press Play on robot');
+fopen(sock);
+disp('Connected!');
+
 %% Section Retriving matrices from robodk
 
 % Generate a Robolink object RDK. This object interfaces with RoboDK.
@@ -10,28 +21,101 @@ RDK = Robolink;
 
 robot = RDK.Item('UR5');
 
-% Get the library path
-path = RDK.getParam('PATH_LIBRARY');
-
 % Display a list of all items
 % fprintf('Available items in the station:\n');
 % disp(RDK.ItemList());
 tooltop = RDK.Item('tooltop2');
-matrices = cell(tooltop.InstructionCount(),1);
-reference = RDK.Item('Reference SW');
+reference = RDK.Item('Reference SW').Pose();
 
 tool = [     1.000000,     0.000000,     0.000000,     0.000000 ;
-      0.000000,     1.0,    -0.0,   0.000000 ;
-      0.000000,     0.0,     1.0,    100.000000 ;
+      0.000000,     0.707107,    -0.707107,   -50.000000 ;
+      0.000000,     0.707107,     0.707107,    95.000000 ;
       0.000000,     0.000000,     0.000000,     1.000000 ];
 
+
 counter = 0;
+PosZYX = zeros(100,6);
 
 for i = 1:tooltop.InstructionCount()
     [name, instype, movetype, isjointtarget, pose, joints] = tooltop.Instruction(i);
     if pose ~= -1 
         counter = counter + 1;
-        matrices{counter} = reference.Pose()*pose;
+        matrix = reference*pose;
+        temp(1,1:3) = matrix(1:3,4).';
+        temp(1,4:6) = tr2rpy(matrix, 'zyx');
+        PosZYX(counter,:) = temp(1,:);
+    end
+end
+
+%% Section Trajectories generation.
+res = 0.1;
+movementSpeed = 50; % mm/sec
+
+variables = cell(counter, 4);
+time = [0  0;
+        0  0; ];
+accumTime = 0;
+
+for i=1:counter-1
+    
+    TB1C = PosZYX(i,:);
+    TB2C = PosZYX(i+1,:);
+    
+    lengths = sqrt( (TB2C(1) - TB1C(1))^2 + (TB2C(2) - TB1C(2))^2 + (TB2C(3) - TB1C(3))^2 );
+    
+    tf = lengths / movementSpeed; %tf is the time, whichs is the length / ( mm / sec )
+
+    a1 = TB1C;
+    a2 = zeros(size(TB1C));
+    a3 = 3/tf^2*(TB2C-TB1C);
+    a4 = -2/tf^3*(TB2C-TB1C);
+    
+    variables{i,1} = a1;
+    variables{i,2} = a2;
+    variables{i,3} = a3;
+    variables{i,4} = a4;
+    
+    time(i,1) = tf;
+    accumTime = accumTime + tf;
+    time(i,2) = accumTime;
+end
+
+%% Testing times
+
+clearvars a1 a2 a3 a4;
+
+values = 1:res:accumTime;
+Trans = cell(length(values), 1);
+counter = 1;
+cords(1,1:6) = [1; 2; 3; 4; 5; 6];
+
+for i=1:length(values)
+    
+    for j=1:size(time,1)
+        
+        if values(i) < time(j,2)
+            
+            if j == 1
+                timeIntoPeriode = values(i);
+            else
+                timeIntoPeriode = (values(i) - time(j-1,2) );
+            end
+            
+            if time(j,1) < timeIntoPeriode
+                time(j-1,2)
+                values(i)
+                timeIntoPeriode
+            end
+           
+            a1 = variables{j,1};
+            a2 = variables{j,2};
+            a3 = variables{j,3};
+            a4 = variables{j,4};
+            
+            cords(counter, 1:6) = a1 + a2*timeIntoPeriode + a3*timeIntoPeriode^2 + a4*timeIntoPeriode^3;
+            counter = counter + 1;
+            break;
+        end
     end
 end
 
@@ -100,10 +184,15 @@ T56 = [cos(Q(i,4))                 ,-sin(Q(i,4))                   ,0           
 clearvars i;
 %% Section calculation the join angles
 
-Angles = cell(counter);
+Angles = cell(counter,1);
+ToolInv = inv(tool);
 
 for i = 1:counter
-    T06 = matrices{i} * inv(tool);
+    pos = cords(i,1:3);
+    R1 = rotz(cords(i,4)) * roty(cords(i,5)) * rotx(cords(i,6));
+    R1(1:3,4) = pos.';
+    R1(4,1:4) = [ 0 0 0 1];
+    T06 = R1 * ToolInv;
     
     %Calculating P05 in order to calculate theta1:
     P05 = T06*[0; 0; -d6; 1];
@@ -155,13 +244,11 @@ for i = 1:counter
     newT34 = T30*T04;
     t4 = atan2(newT34(2,1), newT34(1,1));
     
-    Angles{i} = rad2deg([t1 t2 t3 t4 t5 t6]);
+    urMoveJ(sock, [t1 t2 t3 t4 t5 t6])
+    %robot.MoveJ(rad2deg([t1 t2 t3 t4 t5 t6]));
+    
+%     Angles{i,1} = [t1 t2 t3 t4 t5 t6];
     
 %     X = ['Thetas from inv. kin, t1: ', num2str(rad2deg(t1)), ' t2: ', num2str(rad2deg(t2)), ' t3: ', num2str(rad2deg(t3)), ' t4: ', num2str(rad2deg(t4)), ' t5: ', num2str(rad2deg(t5)), ' t6: ', num2str(rad2deg(t6))];
 %     disp(X)
-end
-
-%% Section 
-for i=1:counter
-    robot.MoveJ(Angles{i});
 end
