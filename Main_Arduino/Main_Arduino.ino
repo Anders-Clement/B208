@@ -14,7 +14,7 @@ void setup() {
          Serial.begin(9600);
          for(int i = 0; i < NUM_LEDS; i++)
          {
-            leds[i].setRGB(255,0,250);
+            leds[i].setRGB(0,0,0);
          }
          FastLED.show();
 }
