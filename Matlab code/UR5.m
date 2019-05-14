@@ -1,20 +1,20 @@
 clear;
 
 %Lengths of links and distances:
-d1 = 89.2;
+d1 = 89.159;
 a2 = -425;
-a3 = -392.43;
-d4 = 109;
-d5 = 93.65;
-d6 = 82;
+a3 = -392.25;
+d4 = 109.15;
+d5 = 94.65;
+d6 = 82.3;
 
 %Build the arm, using our DH-parameters:
 Rev1 = RevoluteMDH('a', 0, 'alpha', 0, 'd', d1);
-Rev2 = RevoluteMDH('a', 0, 'alpha', pi/2, 'd',0);
+Rev2 = RevoluteMDH('a', 0, 'alpha', 1.570796327, 'd',0);
 Rev3 = RevoluteMDH('a', a2, 'alpha', 0, 'd',0);
 Rev4 = RevoluteMDH('a', a3, 'alpha', 0, 'd',d4);
-Rev5 = RevoluteMDH('a', 0, 'alpha', pi/2, 'd',d5);
-Rev6 = RevoluteMDH('a', 0, 'alpha', -pi/2, 'd',d6);
+Rev5 = RevoluteMDH('a', 0, 'alpha', 1.570796327, 'd',d5);
+Rev6 = RevoluteMDH('a', 0, 'alpha', -1.570796327, 'd',d6);
 %Putting them all together:
 Arm = SerialLink(Rev1 + Rev2 + Rev3 + Rev4 + Rev5 + Rev6, 'name', 'UR5');
 %And show it:
@@ -75,7 +75,7 @@ T56 = [cos(Q(i,4))                 ,-sin(Q(i,4))                   ,0           
     sin(Q(i,4))*sin(Q(i,1))     ,cos(Q(i,4))*sin(Q(i,1))        ,cos(Q(i,1))        ,cos(Q(i,1))*Q(i,3);
     0                           ,0                              ,0                  ,1];
 
-% T06 = T01*T12*T23*T34*T45*T56
+ T06_symb = T01*T12*T23*T34*T45*T56
 % T06 can be evaluated when t1...t6 are defined, which gives the forwards
 % kinematics
 % T06 is overwritten in the next section and used as the goal...
@@ -86,22 +86,36 @@ T56 = [cos(Q(i,4))                 ,-sin(Q(i,4))                   ,0           
 %This is our goal, i.e. chosen end-effector position:
 % alpha, beta, gamma and x,y,z can be changed to get a certain end
 % position:
-alpha = deg2rad(41.587);
-beta = deg2rad(-61.849);
-gamma = deg2rad(62.827);
-x = 412.912;
-y = -43.478;
-z = 711.218;
+
+alpha = deg2rad(-15);
+beta = deg2rad(30);
+gamma = deg2rad(-16);
+x = -219.95;
+y = 17.315;
+z = 9.92;
 
 rot = rotx(alpha)*roty(beta)*rotz(gamma);
 trans = [x;y;z];
+
 T06 = [rot trans;
         0, 0, 0, 1]
 
 
+%%
+
+t1 = deg2rad(115);
+t2 = deg2rad(-28.57);
+t3 = deg2rad(-32.31);
+t4 = deg2rad(-74.06);
+t5 = deg2rad(34.95);
+t6 = deg2rad(23.87);
+
+tmp = eval(T06_symb)
+%%
+
 %Calculating P05 in order to calculate theta1:
 P05 = T06*[0; 0; -d6; 1];
-t1 = atan2(P05(2), P05(1)) + acos(d4/( sqrt(P05(1)^2 + P05(2)^2) )) + pi/2;
+t1 = atan2(P05(2), P05(1)) - acos(d4/( sqrt(P05(1)^2 + P05(2)^2) )) + pi/2;
 
 %P06 is simply the position vector from our T06, that is, the 4th column:
 P06 = T06(:,4);
