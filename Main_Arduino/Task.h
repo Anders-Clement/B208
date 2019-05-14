@@ -23,8 +23,9 @@ public:
   virtual bool canRun(uint32_t now);
   virtual void run(uint32_t now) =0;
   void incRunTime(uint32_t _rate);
-  uint32_t rate;
+  
 private:
+  uint32_t rate;
   uint32_t runTime;
   
 };

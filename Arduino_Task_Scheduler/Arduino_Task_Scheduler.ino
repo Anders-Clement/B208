@@ -1,5 +1,3 @@
-
-
 #include "Scheduler.h"    //Scheduler class which runs tasks
 #include "FastLED.h"
 
@@ -24,7 +22,6 @@ void loop() {
 
   
   uint32_t now = millis();    //Get current time, it is needed to construct the tasks:
-
   Task* tasks[] = {}; //Add all tasks to an array, to feed to the scheduler 
   //More can be easily be added, as long as they inherit from Task
 

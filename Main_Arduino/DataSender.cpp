@@ -9,18 +9,18 @@ DataSender::DataSender(int* _pins, uint32_t _now, uint32_t _rate) : TimedTask(_n
 
 void DataSender::run(uint32_t now)
 {
-msg="";
-msg+="#";
-for(int i=0; i<2 ;i++)
-{
-msg+=analogRead(pins[i]);
-msg+=",";
-}
-for(int i=2; i<5 ;i++)
-{
-msg+=digitalRead(pins[i]);
-msg+=",";
-}
-msg+="!";
-Serial.print(msg);
+  msg="";
+  msg+="#";
+  for(int i=0; i<2 ;i++)
+  {
+  msg+=analogRead(pins[i]);
+  msg+=",";
+  }
+  for(int i=2; i<5 ;i++)
+  {
+  msg+=digitalRead(pins[i]);
+  msg+=",";
+  }
+  msg+="!";
+  Serial.print(msg);
 }
