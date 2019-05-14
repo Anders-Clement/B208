@@ -9,20 +9,16 @@ FakeWheel::FakeWheel(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for (auto *box: {ui->rpm_lower, ui->rpm_upper, ui->volts_lower, ui->volts_upper, ui->amps_lower, ui->amps_upper})
+    for (auto *box: {ui->rpm_lower, ui->rpm_upper, ui->amps_lower, ui->amps_upper})
         box->setRange(-100, 100);
 
     m_rpm = new FakeValueDial(ui->rpm_lower, ui->rpm_upper, ui->rpm, this);
     m_rpm->setLow(-30.);
     m_rpm->setHigh(30.);
 
-    m_amps = new FakeValueDial(ui->amps_lower, ui->amps_upper, ui->amps, this);
-    m_amps->setLow(-5.);
-    m_amps->setHigh(5.);
-
-    m_volts = new FakeValueDial(ui->volts_lower, ui->volts_upper, ui->volts, this);
-    m_volts->setLow(-5.);
-    m_volts->setHigh(5.);
+    m_pos = new FakeValueDial(ui->amps_lower, ui->amps_upper, ui->pos, this);
+    m_pos->setLow(-5.);
+    m_pos->setHigh(5.);
 }
 
 FakeWheel::~FakeWheel()
@@ -32,23 +28,43 @@ FakeWheel::~FakeWheel()
 
 void FakeWheel::triggerDials()
 {
-    for(auto & dial : {m_volts, m_amps, m_rpm})
+    for(auto & dial : {m_pos, m_rpm})
         dial->onDialSet();
 }
 
-FakeValueDial *FakeWheel::amps()
+FakeValueDial *FakeWheel::pos()
 {
-    return m_amps;
-}
-
-FakeValueDial *FakeWheel::volts()
-{
-    return m_volts;
+    return m_pos;
 }
 
 FakeValueDial *FakeWheel::rpm()
 {
     return m_rpm;
+}
+
+int FakeWheel::speed()
+{
+    return false;
+}
+
+int FakeWheel::position()
+{
+    return m_pos->value();
+}
+
+bool FakeWheel::switchState()
+{
+    return false;
+}
+
+void FakeWheel::setLED(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
+{
+    // TODO do smth
+}
+
+void FakeWheel::setResistance(uint8_t)
+{
+
 }
 
 FakeValueDial::FakeValueDial(QDoubleSpinBox *low, QDoubleSpinBox *high, QDial *dial, QObject *parent):
@@ -71,12 +87,17 @@ FakeValueDial::FakeValueDial(QDoubleSpinBox *low, QDoubleSpinBox *high, QDial *d
 
 void FakeValueDial::onDialSet()
 {
+    this->valueChanged(value());
+    lowChanged(m_lowBox->value());
+    highChanged(m_highBox->value());
+}
+
+qreal FakeValueDial::value()
+{
     auto low = m_lowBox->value();
     auto high = m_highBox->value();
-    this->valueChanged(map(m_dial->value(), m_dial->minimum(), m_dial->maximum(),
-                           low, high));
-    lowChanged(low);
-    highChanged(high);
+    return map(m_dial->value(), m_dial->minimum(), m_dial->maximum(),
+                               low, high);
 }
 
 void FakeValueDial::setLow(qreal low)

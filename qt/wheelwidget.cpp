@@ -30,8 +30,7 @@ WheelWidget::WheelWidget(QWidget *parent) :
 
     int startR = 200;
     m_rpmGauge = new RPMGauge(rect(startR), {80, 100}, {64, 224, 208}, graphicsScene, "R");
-    m_ampsGauge = new Gauge(rect(startR + 10), {80, 115}, Qt::green, graphicsScene, "A");
-    m_voltsGauge = new Gauge(rect(startR + 20), {80, 130}, Qt::red, graphicsScene, "V");
+    m_posGauge = new Gauge(rect(startR + 10), {80, 115}, Qt::green, graphicsScene, "P");
 
 }
 
@@ -40,14 +39,9 @@ WheelWidget::~WheelWidget()
     delete ui;
 }
 
-Gauge *WheelWidget::ampsGauge()
+Gauge *WheelWidget::posGauge()
 {
-    return m_ampsGauge;
-}
-
-Gauge *WheelWidget::voltsGauge()
-{
-    return m_voltsGauge;
+    return m_posGauge;
 }
 
 Gauge *WheelWidget::rpmGauge()

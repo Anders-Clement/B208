@@ -54,13 +54,12 @@ public:
     explicit WheelWidget(QWidget *parent = nullptr);
     ~WheelWidget();
 
-    Gauge *ampsGauge();
-    Gauge *voltsGauge();
+    Gauge *posGauge();
     Gauge *rpmGauge();
 private:
     Ui::WheelWidget *ui;
     QGraphicsScene *graphicsScene;
-    Gauge *m_ampsGauge, *m_voltsGauge, *m_rpmGauge;
+    Gauge *m_posGauge, *m_rpmGauge;
 };
 
 #endif // WHEELWIDGET_H

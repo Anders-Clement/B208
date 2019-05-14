@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <functional>
-
+#include "iarduino.h"
 
 namespace Ui {
 class FakeWheel;
@@ -28,12 +28,15 @@ signals:
 public slots:
     void setLow(qreal);
     void setHigh(qreal);
+public:
+    qreal value();
 private:
     QDoubleSpinBox *m_lowBox, *m_highBox;
     QDial *m_dial;
 };
 
-class FakeWheel : public QWidget
+
+class FakeWheel : public QWidget, public IArduino
 {
     Q_OBJECT
 public:
@@ -42,13 +45,19 @@ public:
     virtual ~FakeWheel();
 
     void triggerDials();
-    FakeValueDial *amps();
-    FakeValueDial *volts();
+    FakeValueDial *pos();
     FakeValueDial *rpm();
+
+public:
+    int speed() override;
+    int position() override;
+    bool switchState() override;
+
+    void setLED(uint8_t index, uint8_t r, uint8_t g, uint8_t b) override;
+    void setResistance(uint8_t) override;
 private:
     Ui::FakeWheel *ui;
-    std::vector<std::function<void(void)>> dialSetTriggers;
-    FakeValueDial *m_amps, *m_volts, *m_rpm;
+    FakeValueDial *m_pos, *m_rpm;
 };
 
 #endif // FAKEWHEEL_H

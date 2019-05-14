@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,12 +28,17 @@ SOURCES += \
         main.cpp \
     wheelwidget.cpp \
     fakewheel.cpp \
-    map.cpp
+    map.cpp\
+    templerunner.cpp \
+    arduinoserial.cpp
 
 HEADERS += \
     wheelwidget.h \
     fakewheel.h \
-    map.h
+    map.h \
+    iarduino.h\
+    templerunner.h \
+    arduinoserial.h
 
 FORMS += \
     fakewheel.ui \
