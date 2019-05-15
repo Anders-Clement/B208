@@ -23,4 +23,5 @@ void DataSender::run(uint32_t now)
   }
   msg+="!";
   Serial.print(msg);
+  incRunTime(rate);
 }

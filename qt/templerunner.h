@@ -9,15 +9,17 @@ class TempleRunner : public QObject
 {
     Q_OBJECT
     int playerPos;
-    int GreenPos;
-    int steps;
+    int GreenPos, redPos1, redPos2;
+    int stepsToObstacle;
     int GoalsReached;
+    int start_steps = 200;
+    bool alive;
 public:
     explicit TempleRunner(QObject *parent=nullptr);
     ~TempleRunner();
     void start();
-    void reset();
     void update(int position);
+
 signals:
     void setLED(int index, int r, int g, int b);
     void setReistance(int resistance);

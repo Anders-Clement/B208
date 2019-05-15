@@ -66,16 +66,32 @@ int main(int argc, char *argv[])
     }
     ArduinoSerial arduino(&serialPort);
     TempleRunner templeRunner;
-//    QObject::connect(&arduino, &ArduinoSerial::onData,
-//                     [&](int speed, int weight, int switchState){
-//                            auto pos = weight / (1023/3) + 1;
-//                            standardOutput << "pos: " << pos << endl;
-//                            templeRunner.update(pos);
-//                      });
+    templeRunner.start();
+    QObject::connect(&arduino, &ArduinoSerial::onData,
+                     [&](int speed, int weight, int switchState){
+                            int pos = weight / (1023/3);
+                            if(pos == 3)
+                                pos = 2;
+                            standardOutput << "pos: " << pos << endl;
+                            if(switchState == 0)
+                                templeRunner.update(pos);
+                            else if(switchState == 1)
+                            {
+                                arduino.setLED(1,100,0,100);
+                                arduino.setLED(2,100,0,100);
+                                arduino.setLED(3,100,0,100);
+                            }
+                            else if (switchState == 2)
+                            {
+                                templeRunner.start();
+                                templeRunner.update(1);
+                            }
+
+                      });
 
     QObject::connect(&arduino, &ArduinoSerial::onData,
             [&](int speed, int weight, int switchState){
-                standardOutput << speed << " " << weight << " " << switchState << endl;
+                //standardOutput << speed << " " << weight << " " << switchState << endl;
             });
 
 
