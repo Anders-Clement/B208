@@ -6,13 +6,14 @@
 #include <QTextStream>
 #include <QDebug>
 #include "templerunner.h"
+#include "map.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
     WheelWidget wheelWidget;
-    FakeWheel fakeWheel;
+//    FakeWheel fakeWheel;
 
 
 //    QObject::connect(&fakeWheel, &FakeWheel::wattsChanged,
@@ -37,7 +38,10 @@ int main(int argc, char *argv[])
 //    wheelWidget.show();
 
 //    fakeWheel.triggerDials();
-    const int argumentCount = QCoreApplication::arguments().size();
+
+    wheelWidget.weightGauge()->setLow(-1024);
+    wheelWidget.weightGauge()->setHigh(1024);
+//    const int argumentCount = QCoreApplication::arguments().size();
     const QStringList argumentList = QCoreApplication::arguments();
 
     QTextStream standardOutput(stdout);
@@ -62,20 +66,28 @@ int main(int argc, char *argv[])
     }
     ArduinoSerial arduino(&serialPort);
     TempleRunner templeRunner;
+//    QObject::connect(&arduino, &ArduinoSerial::onData,
+//                     [&](int speed, int weight, int switchState){
+//                            auto pos = weight / (1023/3) + 1;
+//                            standardOutput << "pos: " << pos << endl;
+//                            templeRunner.update(pos);
+//                      });
+
     QObject::connect(&arduino, &ArduinoSerial::onData,
             [&](int speed, int weight, int switchState){
                 standardOutput << speed << " " << weight << " " << switchState << endl;
             });
 
-    QObject::connect(&arduino, &ArduinoSerial::onData,
-                     [&](int speed, int weight, int switchState){
-                            auto pos = weight / (1023/3) + 1;
-                            standardOutput << "pos: " << pos << endl;
-                            templeRunner.update(pos);
-                      });
+
 
     QObject::connect(&templeRunner, &TempleRunner::setLED,
                      &arduino, &ArduinoSerial::setLED);
 
+    QObject::connect(&arduino, &ArduinoSerial::onData,
+                     [&](int speed, int weight, int switchState){
+                            wheelWidget.weightGauge()->setValue(weight);
+                            wheelWidget.rpmGauge()->setValue(map(speed, 0, 1024, -10, 10));
+                      });
+    wheelWidget.show();
     return app.exec();
 }
