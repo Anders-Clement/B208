@@ -11,7 +11,7 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
          FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
-         Serial.begin(9600);
+         Serial.begin(38400);
          for(int i = 0; i < NUM_LEDS; i++)
          {
             leds[i].setRGB(0,0,0);

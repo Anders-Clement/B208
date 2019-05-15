@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     QSerialPort serialPort;
     const QString serialPortName = "/dev/ttyACM0";
     serialPort.setPortName(serialPortName);
-    const int serialPortBaudRate = QSerialPort::Baud9600;
+    const int serialPortBaudRate = QSerialPort::Baud38400;
     serialPort.setBaudRate(serialPortBaudRate);
 
     serialPort.setDataBits(QSerialPort::Data8);
@@ -77,9 +77,8 @@ int main(int argc, char *argv[])
                                 templeRunner.update(pos);
                             else if(switchState == 1)
                             {
-                                arduino.setLED(1,100,0,100);
-                                arduino.setLED(2,100,0,100);
-                                arduino.setLED(3,100,0,100);
+                                for(int i = 0; i < 9; i++)
+                                   arduino.setLED(i,100,0,100);
                             }
                             else if (switchState == 2)
                             {

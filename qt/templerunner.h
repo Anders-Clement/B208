@@ -12,7 +12,7 @@ class TempleRunner : public QObject
     int GreenPos, redPos1, redPos2;
     int stepsToObstacle;
     int GoalsReached;
-    int start_steps = 200;
+    int start_steps = 100;
     bool alive;
 public:
     explicit TempleRunner(QObject *parent=nullptr);
