@@ -1,4 +1,3 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include "wheelwidget.h"
 #include "fakewheel.h"
@@ -25,6 +24,8 @@ int main(int argc, char *argv[])
 
 
     IGame *games[3] = {
+        new TempleRunner(),
+        new TempleRunner(),
         new TempleRunner()
     };
 
