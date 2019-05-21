@@ -20,7 +20,7 @@ void DataSender::run(uint32_t now)
   }
   for(int i=2; i<6 ;i++)
   {
-  msg+=digitalRead(pins[i]);
+  msg+=!digitalRead(pins[i]);
   msg+=",";
   }
   msg+="!";
