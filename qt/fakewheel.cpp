@@ -2,69 +2,58 @@
 #include "ui_fakewheel.h"
 #include "wheelwidget.h"
 #include "map.h"
+#include"fakedial.h"
 
-FakeWheel::FakeWheel(QWidget *parent) :
-    QWidget (parent),
+
+FakeWheel::FakeWheel(QObject *parent) :
+    IArduino(parent),
+    m_widget(new QWidget),
     ui(new Ui::FakeWheel)
 {
-    ui->setupUi(this);
+    ui->setupUi(m_widget);
+
+    leds = {ui->led0, ui->led1, ui->led2, ui->led3, ui->led4, ui->led5, ui->led6, ui->led7, ui->led8};
 
     for (auto *box: {ui->rpm_lower, ui->rpm_upper, ui->amps_lower, ui->amps_upper})
-        box->setRange(-100, 100);
+        box->setRange(-2048, 2048);
 
     m_rpm = new FakeValueDial(ui->rpm_lower, ui->rpm_upper, ui->rpm, this);
-    m_rpm->setLow(-30.);
-    m_rpm->setHigh(30.);
+    m_rpm->setLow(0);
+    m_rpm->setHigh(1024);
 
-    m_pos = new FakeValueDial(ui->amps_lower, ui->amps_upper, ui->pos, this);
-    m_pos->setLow(-5.);
-    m_pos->setHigh(5.);
+    m_weight = new FakeValueDial(ui->amps_lower, ui->amps_upper, ui->pos, this);
+    m_weight->setLow(0);
+    m_weight->setHigh(1024);
+
+    m_timer.setInterval(m_delay);
+    m_timer.callOnTimeout([this]{
+       this->onData(this->m_rpm->value(),
+                    this->m_weight->value(),
+                    this->ui->switch_slider->value(),
+                    this->ui->reset->checkState());
+    });
+
+    show();
 }
 
-FakeWheel::~FakeWheel()
+
+void FakeWheel::setLED(int index, int r, int g, int b)
 {
-    delete ui;
+    QPalette p;
+    p.setColor(QPalette::Background, {r, g, b});
+    leds[index]->setAutoFillBackground(true);
+    leds[index]->setPalette(p);
 }
 
-void FakeWheel::triggerDials()
+void FakeWheel::setResistance(int)
 {
-    for(auto & dial : {m_pos, m_rpm})
-        dial->onDialSet();
+
 }
 
-FakeValueDial *FakeWheel::pos()
+void FakeWheel::show()
 {
-    return m_pos;
-}
-
-FakeValueDial *FakeWheel::rpm()
-{
-    return m_rpm;
-}
-
-int FakeWheel::speed()
-{
-    return false;
-}
-
-int FakeWheel::position()
-{
-    return m_pos->value();
-}
-
-bool FakeWheel::switchState()
-{
-    return false;
-}
-
-void FakeWheel::setLED(uint8_t index, uint8_t r, uint8_t g, uint8_t b)
-{
-    // TODO do smth
-}
-
-void FakeWheel::setResistance(uint8_t)
-{
-
+    m_widget->show();
+    m_timer.start();
 }
 
 FakeValueDial::FakeValueDial(QDoubleSpinBox *low, QDoubleSpinBox *high, QDial *dial, QObject *parent):

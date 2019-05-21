@@ -4,60 +4,30 @@
 #include <QWidget>
 #include <functional>
 #include "iarduino.h"
+#include <QTimer>
 
 namespace Ui {
 class FakeWheel;
 }
+class FakeValueDial;
 
-class WheelWidget;
-class QDoubleSpinBox;
-class QDial;
-
-class FakeValueDial : public QObject
+class FakeWheel : public IArduino
 {
     Q_OBJECT
 public:
-    explicit FakeValueDial(QDoubleSpinBox *low, QDoubleSpinBox *high, QDial* dial, QObject *parent=nullptr);
-
-    void onDialSet();
-signals:
-    void valueChanged(qreal);
-
-    void lowChanged(qreal);
-    void highChanged(qreal);
-public slots:
-    void setLow(qreal);
-    void setHigh(qreal);
+    FakeWheel(QObject *parent=nullptr);
 public:
-    qreal value();
+    void setLED(int index, int r, int g, int b) override;
+    void setResistance(int) override;
+
+    void show();
 private:
-    QDoubleSpinBox *m_lowBox, *m_highBox;
-    QDial *m_dial;
-};
-
-
-class FakeWheel : public QWidget, public IArduino
-{
-    Q_OBJECT
-public:
-    FakeWheel(QWidget *parent=nullptr);
-
-    virtual ~FakeWheel();
-
-    void triggerDials();
-    FakeValueDial *pos();
-    FakeValueDial *rpm();
-
-public:
-    int speed() override;
-    int position() override;
-    bool switchState() override;
-
-    void setLED(uint8_t index, uint8_t r, uint8_t g, uint8_t b) override;
-    void setResistance(uint8_t) override;
-private:
+    QWidget *m_widget;
     Ui::FakeWheel *ui;
-    FakeValueDial *m_pos, *m_rpm;
+    FakeValueDial *m_weight, *m_rpm;
+    int m_delay = 1000/20;
+    QTimer m_timer;
+    std::vector<QWidget*> leds;
 };
 
 #endif // FAKEWHEEL_H

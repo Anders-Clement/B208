@@ -3,15 +3,17 @@
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
 
-class IArduino
+class IArduino : public QObject
 {
+    Q_OBJECT
+signals:
+    void onData(int speed, int weight, int gameIdx, bool reset);
 public:
-    virtual int speed()=0;
-    virtual int position()=0;
-    virtual bool switchState()=0;
-    virtual ~IArduino(){}
+    explicit IArduino(QObject *parent=nullptr);
 
-    virtual void setLED(uint8_t index, uint8_t r, uint8_t g, uint8_t b)=0;
-    virtual void setResistance(uint8_t)=0;
+    virtual ~IArduino();
+public slots:
+    virtual void setLED(int index, int r, int g, int b)=0;
+    virtual void setResistance(int)=0;
 };
 #endif // IARDUINO_H

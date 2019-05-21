@@ -49,7 +49,6 @@ private:
 class WheelWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit WheelWidget(QWidget *parent = nullptr);
     ~WheelWidget();

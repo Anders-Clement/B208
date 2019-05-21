@@ -29,35 +29,15 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QDial" name="pos">
-      <property name="minimum">
-       <number>-1000</number>
-      </property>
-      <property name="maximum">
-       <number>999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="0" column="1">
+     <widget class="QCheckBox" name="reset">
       <property name="text">
-       <string>FakeWheel</string>
+       <string>reset</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QDoubleSpinBox" name="amps_upper"/>
-    </item>
-    <item row="4" column="1">
-     <widget class="QDoubleSpinBox" name="amps_lower"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_rpm">
-      <property name="text">
-       <string>RPM</string>
-      </property>
-     </widget>
+    <item row="6" column="0">
+     <widget class="QDoubleSpinBox" name="rpm_upper"/>
     </item>
     <item row="2" column="0">
      <widget class="QDial" name="rpm">
@@ -69,15 +49,15 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QDoubleSpinBox" name="rpm_upper"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="label_amps">
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Pos</string>
+       <string>Switch</string>
       </property>
      </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QDoubleSpinBox" name="amps_upper"/>
     </item>
     <item row="4" column="0">
      <widget class="QDoubleSpinBox" name="rpm_lower">
@@ -86,12 +66,83 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QCheckBox" name="switch_rb">
-      <property name="text">
-       <string>switch</string>
+    <item row="2" column="1">
+     <widget class="QDial" name="pos">
+      <property name="minimum">
+       <number>-1000</number>
+      </property>
+      <property name="maximum">
+       <number>999</number>
       </property>
      </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_rpm">
+      <property name="text">
+       <string>RPM</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>FakeWheel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLabel" name="label_amps">
+      <property name="text">
+       <string>Weight</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDoubleSpinBox" name="amps_lower"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QSlider" name="switch_slider">
+      <property name="maximum">
+       <number>2</number>
+      </property>
+      <property name="pageStep">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QWidget" name="led0" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led1" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led2" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led3" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led4" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led5" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led6" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led7" native="true"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="led8" native="true"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

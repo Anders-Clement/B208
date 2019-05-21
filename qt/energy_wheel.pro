@@ -30,7 +30,9 @@ SOURCES += \
     fakewheel.cpp \
     map.cpp\
     templerunner.cpp \
-    arduinoserial.cpp
+    arduinoserial.cpp \
+    iarduino.cpp \
+    igame.cpp
 
 HEADERS += \
     wheelwidget.h \
@@ -38,7 +40,9 @@ HEADERS += \
     map.h \
     iarduino.h\
     templerunner.h \
-    arduinoserial.h
+    arduinoserial.h \
+    fakedial.h \
+    igame.h
 
 FORMS += \
     fakewheel.ui \
