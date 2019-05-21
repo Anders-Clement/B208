@@ -23,7 +23,7 @@ void loop() {
   
   uint32_t now = millis();    //Get current time, it is needed to construct the tasks:
 
-  int pins[] = {A0, A1, 9,10,11};
+  int pins[] = {A0, A1, 9,10,11,12};
   DataSender ds(pins,now,50);
   DataReciever dr(3, leds, now);
   
