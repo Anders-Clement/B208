@@ -26,11 +26,12 @@ robot = RDK.Item('UR5');
 % disp(RDK.ItemList());
 tooltop = RDK.Item('tooltop2');
 reference = RDK.Item('Reference SW').Pose();
+table = RDK.Item('Table Reference').Pose();
 
-tool = [     1.000000,     0.000000,     0.000000,     0.000000 ;
-      0.000000,     0.707107,    -0.707107,   -50.000000 ;
-      0.000000,     0.707107,     0.707107,    95.000000 ;
-      0.000000,     0.000000,     0.000000,     1.000000 ];
+tool = [    1.000000,     0.000000,     0.000000,     0.000000 ;
+            0.000000,     1.000000,     0.0,          0.000000 ;
+            0.000000,     0.000000,     1.0,         95.000000 ;
+            0.000000,     0.000000,     0.000000,     1.000000 ];
 
 
 counter = 0;
@@ -40,10 +41,11 @@ for i = 1:tooltop.InstructionCount()
     [name, instype, movetype, isjointtarget, pose, joints] = tooltop.Instruction(i);
     if pose ~= -1 
         counter = counter + 1;
-        matrix = reference*pose;
+        matrix = table*reference*pose;
         temp(1,1:3) = matrix(1:3,4).';
         temp(1,4:6) = tr2rpy(matrix, 'zyx');
         PosZYX(counter,:) = temp(1,:);
+        %robot.MoveL(matrix)
     end
 end
 
@@ -186,13 +188,16 @@ clearvars i;
 
 Angles = cell(counter,1);
 ToolInv = inv(tool);
+hold on;
 
-for i = 1:counter
+for i = 1:counter-1
     pos = cords(i,1:3);
     R1 = rotz(cords(i,4)) * roty(cords(i,5)) * rotx(cords(i,6));
     R1(1:3,4) = pos.';
     R1(4,1:4) = [ 0 0 0 1];
     T06 = R1 * ToolInv;
+    
+    %trplot(R1);
     
     %Calculating P05 in order to calculate theta1:
     P05 = T06*[0; 0; -d6; 1];
@@ -213,7 +218,7 @@ for i = 1:counter
     if and(isreal(atanTop), isreal(atanBottom))
         t6 = atan2(atanTop, atanBottom );
     else
-        t6 = deg2rad(180);
+        continue;
     end
 
     %We need T14 for t3, calculate with known thetas, and symbolic
@@ -234,7 +239,7 @@ for i = 1:counter
     if and(isreal(atan2Top), isreal(atan2Bottom))
         t2 = atan2(atan2Top, atan2Bottom) - asin( (-a3*sin(t3)) / (nP14xz));
     else
-        t2 = atan(atan2Top / atan2Bottom) -asin( (-a3*sin(t3)) / (nP14xz));
+        continue;
     end
 
     %For t4, T34 is needed, which can be calculated from now known thetas 
@@ -242,13 +247,26 @@ for i = 1:counter
     T30 = eval(inv(T23) * inv(T12) * inv(T01));
     T04 = T06*eval(inv(T56)*inv(T45));
     newT34 = T30*T04;
-    t4 = atan2(newT34(2,1), newT34(1,1));
     
-    urMoveJ(sock, [t1 t2 t3 t4 t5 t6])
-    %robot.MoveJ(rad2deg([t1 t2 t3 t4 t5 t6]));
+    if and(isreal(newT34(2,1)), isreal(newT34(1,1)))
+        t4 = atan2(newT34(2,1), newT34(1,1));
+    else
+        continue;
+    end
+        
+    %robot.MoveL(rad2deg([t1 t2 t3 t4 t5 t6]));
     
-%     Angles{i,1} = [t1 t2 t3 t4 t5 t6];
-    
-%     X = ['Thetas from inv. kin, t1: ', num2str(rad2deg(t1)), ' t2: ', num2str(rad2deg(t2)), ' t3: ', num2str(rad2deg(t3)), ' t4: ', num2str(rad2deg(t4)), ' t5: ', num2str(rad2deg(t5)), ' t6: ', num2str(rad2deg(t6))];
-%     disp(X)
+    Angles{i,1} = [t1 t2 t3 t4 t5 t6];
+end
+
+%% Sending the positions to the robot.
+
+%urChangeVel(sock, [0.4,0.4]); %Setting the acc and vel high because we're rebels.
+
+duration = res^-1;
+for idx=1 : counter-1
+   tic;
+   %urMoveL(sock, Angles{idx,1});
+   robot.setJoints(rad2deg(Angles{idx,1}));
+   java.lang.Thread.sleep(duration-toc);
 end
