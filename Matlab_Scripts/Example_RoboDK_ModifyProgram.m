@@ -26,6 +26,7 @@ robot = RDK.Item('UR5');
 % disp(RDK.ItemList());
 tooltop = RDK.Item('tooltop2');
 reference = RDK.Item('Reference SW').Pose();
+table = RDK.Item('Table Reference').Pose();
 
 tool = [    1.000000,     0.000000,     0.000000,     0.000000 ;
             0.000000,     1.000000,     0.0,          0.000000 ;
@@ -40,10 +41,11 @@ for i = 1:tooltop.InstructionCount()
     [name, instype, movetype, isjointtarget, pose, joints] = tooltop.Instruction(i);
     if pose ~= -1 
         counter = counter + 1;
-        matrix = reference*pose;
+        matrix = table*reference*pose;
         temp(1,1:3) = matrix(1:3,4).';
         temp(1,4:6) = tr2rpy(matrix, 'zyx');
         PosZYX(counter,:) = temp(1,:);
+        %robot.MoveL(matrix)
     end
 end
 
@@ -186,6 +188,7 @@ clearvars i;
 
 Angles = cell(counter,1);
 ToolInv = inv(tool);
+hold on;
 
 for i = 1:counter-1
     pos = cords(i,1:3);
@@ -193,6 +196,8 @@ for i = 1:counter-1
     R1(1:3,4) = pos.';
     R1(4,1:4) = [ 0 0 0 1];
     T06 = R1 * ToolInv;
+    
+    %trplot(R1);
     
     %Calculating P05 in order to calculate theta1:
     P05 = T06*[0; 0; -d6; 1];
@@ -213,7 +218,7 @@ for i = 1:counter-1
     if and(isreal(atanTop), isreal(atanBottom))
         t6 = atan2(atanTop, atanBottom );
     else
-        t6 = deg2rad(180);
+        continue;
     end
 
     %We need T14 for t3, calculate with known thetas, and symbolic
@@ -234,7 +239,7 @@ for i = 1:counter-1
     if and(isreal(atan2Top), isreal(atan2Bottom))
         t2 = atan2(atan2Top, atan2Bottom) - asin( (-a3*sin(t3)) / (nP14xz));
     else
-        t2 = atan(atan2Top / atan2Bottom) -asin( (-a3*sin(t3)) / (nP14xz));
+        continue;
     end
 
     %For t4, T34 is needed, which can be calculated from now known thetas 
@@ -242,9 +247,14 @@ for i = 1:counter-1
     T30 = eval(inv(T23) * inv(T12) * inv(T01));
     T04 = T06*eval(inv(T56)*inv(T45));
     newT34 = T30*T04;
-    t4 = atan2(newT34(2,1), newT34(1,1));
     
-    robot.setJoints(rad2deg([t1 t2 t3 t4 t5 t6]));
+    if and(isreal(newT34(2,1)), isreal(newT34(1,1)))
+        t4 = atan2(newT34(2,1), newT34(1,1));
+    else
+        continue;
+    end
+        
+    %robot.MoveL(rad2deg([t1 t2 t3 t4 t5 t6]));
     
     Angles{i,1} = [t1 t2 t3 t4 t5 t6];
 end
