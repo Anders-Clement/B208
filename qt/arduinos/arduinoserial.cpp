@@ -1,7 +1,6 @@
 #include "arduinoserial.h"
 #include <QTextStream>
 
-
 ArduinoSerial::ArduinoSerial(QSerialPort *port):
     m_port(port)
 {
@@ -71,7 +70,7 @@ void ArduinoSerial::handleReadyRead()
                 break;
             else ++switchState;
 
-        onData(ints[0], ints[1], switchState, false);
+        onData(ints[0], ints[1], switchState, ints.back());
     }
 }
 

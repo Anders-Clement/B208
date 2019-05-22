@@ -4,8 +4,10 @@
 #include <iostream>
 #include "time.h"
 
-TempleRunner::TempleRunner(QObject *parent):
-    IGame(parent)
+TempleRunner::TempleRunner(QColor target, QColor obstacle, QObject *parent):
+    IGame(parent),
+    m_target(target),
+    m_obstacle(obstacle)
 {
 
 }
@@ -57,10 +59,14 @@ void TempleRunner::update(int position)
         {
             if(i != GreenPos)
                 for(int j = 0; j < 3; j++)
-                    setLED(i*3 + j, 255 - stepsToObstacle*2, 0,0);
+                {
+//                    setLED(i*3 + j, 255 - stepsToObstacle*2, 0,0);
+                    auto dim = 255/(255 - stepsToObstacle*2);
+                    setLED(i*3 + j, m_obstacle.red()/dim, m_obstacle.green()/dim, m_obstacle.blue()/dim);
+                }
             else
                 for(int j = 0; j < 3; j++)
-                    setLED(i*3 +j, 0,255,0);
+                    setLED(i*3 +j, m_target.red(), m_target.green(), m_target.blue());
         }
     }
     else {

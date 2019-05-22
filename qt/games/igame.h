@@ -11,7 +11,7 @@ public:
 
 signals:
     void setLED(int id, int r, int g, int b);
-    void setReistance(int);
+    void setResistance(int);
 public slots:
     virtual void update(int speed, int weight, int switchState, bool reset)=0;
     virtual void start()=0;

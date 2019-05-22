@@ -7,7 +7,7 @@
 #include "games/igame.h"
 #include "games/templerunner.h"
 #include "map.h"
-
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     wheelWidget.weightGauge()->setLow(-1024);
     wheelWidget.weightGauge()->setHigh(1024);
 
-    bool fake = true;
+    bool fake = false;
     IArduino * arduino =
             (!fake) ? (IArduino*)new ArduinoSerial("/dev/ttyACM0")
                     : (IArduino*)new FakeWheel();
@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 
     IGame *games[3] = {
         new TempleRunner(),
-        new TempleRunner(),
-        new TempleRunner()
+        new TempleRunner(Qt::yellow, Qt::magenta),
+        new TempleRunner(Qt::cyan, Qt::darkGreen)
     };
 
     for (IGame *game : games)
@@ -37,12 +37,19 @@ int main(int argc, char *argv[])
         game->start();
     }
 
+    int oldSwitchState = 0;
     QObject::connect(arduino, &IArduino::onData,
                      [&](int speed, int weight, int switchState, bool reset){
-                              if (reset)
+                              std::cout << switchState << std::endl;
+                              if (reset || oldSwitchState != switchState)
+                              {
                                   games[switchState]->start();
+                              }
+
                               games[switchState]->update(speed, weight, switchState, reset);
-                      });
+                              oldSwitchState = switchState;
+
+                        });
 
 
 
