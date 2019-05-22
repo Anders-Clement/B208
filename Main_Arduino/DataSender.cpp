@@ -18,11 +18,13 @@ void DataSender::run(uint32_t now)
   msg+=analogRead(pins[i]);
   msg+=",";
   }
-  for(int i=2; i<6 ;i++)
+  for(int i=2; i<5 ;i++)
   {
-  msg+=!digitalRead(pins[i]);
+  msg+=digitalRead(pins[i]);
   msg+=",";
   }
+   msg+=!digitalRead(pins[5]);
+  msg+=",";
   msg+="!";
   Serial.print(msg);
   incRunTime(rate);
