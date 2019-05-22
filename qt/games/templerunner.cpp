@@ -1,7 +1,6 @@
 #include "templerunner.h"
 #include <QTimer>
 #include <QObject>
-#include "iarduino.h"
 #include <iostream>
 #include "time.h"
 
@@ -30,7 +29,6 @@ void TempleRunner::update(int speed, int weight, int switchState, bool reset)
 
 void TempleRunner::update(int position)
 {
-    std::cout << position << " " << GreenPos << std::endl;
     if(alive)
     {
         stepsToObstacle--;

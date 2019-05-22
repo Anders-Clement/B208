@@ -1,12 +1,13 @@
 #include <QApplication>
 #include "wheelwidget.h"
-#include "fakewheel.h"
-#include "arduinoserial.h"
+#include "arduinos/fakewheel.h"
+#include "arduinos/arduinoserial.h"
 #include <QTextStream>
 #include <QDebug>
-#include "templerunner.h"
+#include "games/igame.h"
+#include "games/templerunner.h"
 #include "map.h"
-#include "igame.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -42,11 +43,6 @@ int main(int argc, char *argv[])
                                   games[switchState]->start();
                               games[switchState]->update(speed, weight, switchState, reset);
                       });
-
-    QObject::connect(arduino, &IArduino::onData,
-            [&](int speed, int weight, int switchState, bool){
-                //standardOutput << speed << " " << weight << " " << switchState << endl;
-            });
 
 
 
