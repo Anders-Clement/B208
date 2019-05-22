@@ -29,8 +29,8 @@ WheelWidget::WheelWidget(QWidget *parent) :
     };
 
     int startR = 200;
-    m_rpmGauge = new RPMGauge(rect(startR), {80, 100}, {64, 224, 208}, graphicsScene, "R");
-    m_weightGauge = new Gauge(rect(startR + 10), {80, 115}, Qt::green, graphicsScene, "P");
+    m_rpmGauge = new RPMGauge(rect(startR), {80, 100}, {64, 224, 208}, graphicsScene, "RPM    ");
+    m_weightGauge = new Gauge(rect(startR + 10), {80, 115}, Qt::green, graphicsScene, "Weight ");
 
 }
 

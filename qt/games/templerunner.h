@@ -2,10 +2,11 @@
 #define TEMPLERUNNER_H
 #include <QObject>
 #include <chrono>
+#include "igame.h"
 
 class IArduino;
 
-class TempleRunner : public QObject
+class TempleRunner : public IGame
 {
     Q_OBJECT
     int playerPos;
@@ -16,15 +17,11 @@ class TempleRunner : public QObject
     bool alive;
 public:
     explicit TempleRunner(QObject *parent=nullptr);
-    ~TempleRunner();
-    void start();
-    void update(int position);
-
-signals:
-    void setLED(int index, int r, int g, int b);
-    void setReistance(int resistance);
+    ~TempleRunner() override;
+    void start() override;
+    void update(int speed, int weight, int switchState, bool reset) override;
 private:
-//    IArduino *m_arduino;
+    void update(int position);
 };
 
 #endif // TEMPLERUNNER_H

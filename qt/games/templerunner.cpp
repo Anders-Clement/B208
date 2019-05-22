@@ -1,12 +1,11 @@
 #include "templerunner.h"
 #include <QTimer>
 #include <QObject>
-#include "iarduino.h"
 #include <iostream>
 #include "time.h"
 
 TempleRunner::TempleRunner(QObject *parent):
-    QObject(parent)
+    IGame(parent)
 {
 
 }
@@ -19,6 +18,13 @@ void TempleRunner::start()
     alive = true;
     stepsToObstacle = start_steps;
     GreenPos = rand() % 3;
+}
+
+void TempleRunner::update(int speed, int weight, int switchState, bool reset)
+{
+    auto position = weight / (1024/3);
+    position = position <= 2 ? position : 2;
+    update(position);
 }
 
 void TempleRunner::update(int position)

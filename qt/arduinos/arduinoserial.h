@@ -3,21 +3,19 @@
 
 #include <QtSerialPort/QSerialPort>
 #include <QTimer>
+#include "iarduino.h"
 
-class ArduinoSerial : public QObject
+class ArduinoSerial : public IArduino
 {
     Q_OBJECT
 public:
     ArduinoSerial(QSerialPort *port);
+    ArduinoSerial(const QString & portPath);
 
+    void setLED(int index, int r, int g, int b) override;
+    void setResistance(int) override;
 public slots:
-    void setLED(int index, int r, int g, int b);
-    void setResistance(int);
-
     void handleReadyRead();
-signals:
-    void onData(int speed, int weight, int switchState);
-
 private:
     QSerialPort *m_port;
     QByteArray m_readData;

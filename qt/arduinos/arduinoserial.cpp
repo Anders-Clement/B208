@@ -1,10 +1,35 @@
 #include "arduinoserial.h"
-
+#include <QTextStream>
 
 
 ArduinoSerial::ArduinoSerial(QSerialPort *port):
     m_port(port)
 {
+    connect(m_port, &QSerialPort::readyRead, this, &ArduinoSerial::handleReadyRead);
+}
+
+ArduinoSerial::ArduinoSerial(const QString &portPath)
+{
+    QTextStream standardOutput(stdout);
+
+    m_port = new QSerialPort(this);
+
+    m_port->setPortName(portPath);
+    const int serialPortBaudRate = QSerialPort::Baud38400;
+    m_port->setBaudRate(serialPortBaudRate);
+
+    m_port->setDataBits(QSerialPort::Data8);
+    m_port->setParity(QSerialPort::NoParity);
+    m_port->setStopBits(QSerialPort::OneStop);
+    m_port->setFlowControl(QSerialPort::NoFlowControl);
+
+    if (!m_port->open(QIODevice::ReadWrite)) {
+        standardOutput << QObject::tr("Failed to open port %1, error: %2")
+                          .arg(portPath)
+                          .arg(m_port->errorString())
+                       << endl;
+    }
+
     connect(m_port, &QSerialPort::readyRead, this, &ArduinoSerial::handleReadyRead);
 }
 
@@ -46,7 +71,7 @@ void ArduinoSerial::handleReadyRead()
                 break;
             else ++switchState;
 
-        onData(ints[0], ints[1], switchState);
+        onData(ints[0], ints[1], switchState, false);
     }
 }
 
