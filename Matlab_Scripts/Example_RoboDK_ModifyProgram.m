@@ -49,6 +49,20 @@ for i = 1:tooltop.InstructionCount()
     end
 end
 
+%%
+
+for indexs = 1:length(PosZYX)
+   if PosZYX(indexs,4) < 0
+       PosZYX(indexs,4) = PosZYX(indexs,4) + 2*pi;
+   end
+   if PosZYX(indexs,5) < 0
+        PosZYX(indexs,5) = PosZYX(indexs,5) + 2*pi;
+   end
+   if PosZYX(indexs,6) < 0
+        PosZYX(indexs,6) = PosZYX(indexs,6) + 2*pi;
+   end
+end
+
 %% Section Trajectories generation.
 res = 0.1;
 movementSpeed = 50; % mm/sec
@@ -90,6 +104,7 @@ values = 1:res:accumTime;
 Trans = cell(length(values), 1);
 counter = 1;
 cords(1,1:6) = [1; 2; 3; 4; 5; 6];
+valuesTemp = values.';
 
 for i=1:length(values)
     
@@ -120,6 +135,8 @@ for i=1:length(values)
         end
     end
 end
+
+plot(valuesTemp,cords(:,4:6))
 
 %% Section UR5 Forward Kinematics
 
@@ -260,13 +277,16 @@ for i = 1:counter-1
 end
 
 %% Sending the positions to the robot.
+hold on
 
-%urChangeVel(sock, [0.4,0.4]); %Setting the acc and vel high because we're rebels.
+plotMatrix = [];
 
-duration = res^-1;
-for idx=1 : counter-1
-   tic;
-   %urMoveL(sock, Angles{idx,1});
-   robot.setJoints(rad2deg(Angles{idx,1}));
-   java.lang.Thread.sleep(duration-toc);
+for idx=1 : length(values)
+   AnglesTemp = Angles{idx,1};
+   if length(AnglesTemp) == 0
+       continue
+   end
+   plotMatrix(idx,:) = rad2deg(AnglesTemp);
 end
+
+plot(valuesTemp,plotMatrix)
