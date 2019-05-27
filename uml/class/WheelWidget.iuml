@@ -1,0 +1,9 @@
+class WheelWidget {
+    + rpmGauge(): Gauge*
+    + weightGauge(): Gauge*
+    --
+    - ui: Ui::WheelWidget*
+    - graphicsScene: QGraphicsScene*
+    - m_weightGauge: Gauge*
+    - m_rpmGauge: Gauge*
+}

@@ -20,7 +20,6 @@ public:
     void setLED(int index, int r, int g, int b) override;
     void setResistance(int) override;
 
-    void show();
 private:
     QWidget *m_widget;
     Ui::FakeWheel *ui;

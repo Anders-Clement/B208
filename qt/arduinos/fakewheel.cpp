@@ -33,7 +33,8 @@ FakeWheel::FakeWheel(QObject *parent) :
                     this->ui->reset->checkState());
     });
 
-    show();
+    m_widget->show();
+    m_timer.start();
 }
 
 
@@ -48,12 +49,6 @@ void FakeWheel::setLED(int index, int r, int g, int b)
 void FakeWheel::setResistance(int)
 {
 
-}
-
-void FakeWheel::show()
-{
-    m_widget->show();
-    m_timer.start();
 }
 
 FakeValueDial::FakeValueDial(QDoubleSpinBox *low, QDoubleSpinBox *high, QDial *dial, QObject *parent):

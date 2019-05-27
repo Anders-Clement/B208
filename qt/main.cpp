@@ -2,12 +2,9 @@
 #include "wheelwidget.h"
 #include "arduinos/fakewheel.h"
 #include "arduinos/arduinoserial.h"
-#include <QTextStream>
-#include <QDebug>
-#include "games/igame.h"
 #include "games/templerunner.h"
 #include "map.h"
-#include <iostream>
+
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +15,7 @@ int main(int argc, char *argv[])
     wheelWidget.weightGauge()->setLow(-1024);
     wheelWidget.weightGauge()->setHigh(1024);
 
-    bool fake = false;
+    bool fake = true; // change to false for real one
     IArduino * arduino =
             (!fake) ? (IArduino*)new ArduinoSerial("/dev/ttyACM0")
                     : (IArduino*)new FakeWheel();
@@ -40,7 +37,6 @@ int main(int argc, char *argv[])
     int oldSwitchState = 0;
     QObject::connect(arduino, &IArduino::onData,
                      [&](int speed, int weight, int switchState, bool reset){
-                              std::cout << switchState << std::endl;
                               if (reset || oldSwitchState != switchState)
                               {
                                   games[switchState]->start();

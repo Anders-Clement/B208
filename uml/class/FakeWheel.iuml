@@ -1,0 +1,11 @@
+class FakeWheel {
+    + setLED(index: int, r: int, g: int, b: int)
+    + setResistance(int)
+    --
+    - m_widget: QWidget*
+    - ui: Ui::FakeWheel*
+    - m_weight, m_rpm: FakeValueDial*
+    - m_delay: int 
+    - m_timer: QTimer
+    - leds: std::vector<QWidget*>
+}

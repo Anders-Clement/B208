@@ -2,62 +2,29 @@
 left to right direction
 ' class QObject
 class main
-abstract IGame {
-    --signals--
-    + setLED()
-    + setResistance()
-    --slots--
-    + {abstract} update(speed: int, weight: int, gameIdx: int, reset: bool)
-    + {abstract} start()
-}
+!include class/IGame.iuml
 'IGame ..|> QObject
-
-class TempleRunner {
-    --slots--
-    + start()
-    + update(speed: int, weight: int, gameIdx: int, reset: bool)
-}
-
-class SomeOtherGame{
-    --slots--
-    + start()
-    + update(speed: int, weight: int, gameIdx: int, reset: bool)
-}
+!include class/TempleRunner.iuml
+!include class/SomeOtherGame.iuml
 
 TempleRunner ..|> IGame
 SomeOtherGame ..|> IGame
 
-abstract IArduino {
-    --slots--
-    + {abstract} setLED(index: int, r: int, g: int, b: int)
-    + {abstract} setResistance(int)
-    --signals--
-    + onData(speed: int, weight: int, gameIdx: int, reset: bool)
-}
+!include class/IArduino.iuml
 
 'IArduino ..|> QObject
 
 IArduino <-- main
 IGame "3"<--"1" main
 WheelWidget <-- main
-class ArduinoSerial {
-    --slots--
-    + setLED(index: int, r: int, g: int, b: int)
-    + setResistance(int)
-}
+!include class/ArduinoSerial.iuml
 
-class FakeWheel {
-    --slots--
-    + setLED(index: int, r: int, g: int, b: int)
-    + setResistance(int)
-}
+!include class/FakeWheel.iuml
+
 ArduinoSerial ..|> IArduino
 FakeWheel ..|> IArduino
 
-class WheelWidget {
-    + rpmGauge(): Gauge*
-    + weightGauge(): Gauge*
-}
+!include class/WheelWidget.iuml
 
 'WheelWidget ..|> QWidget
 @enduml

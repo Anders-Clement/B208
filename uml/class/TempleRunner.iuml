@@ -1,0 +1,16 @@
+class TempleRunner {
+    + start()
+    + update(speed: int, weight: int, gameIdx: int, reset: bool)
+    --
+    - update(position)
+    - playerPos: int
+    - GreenPos: int
+    - redPos1: int
+    - redPos2: int
+    - stepsToObstacle: int
+    - GoalsReached: int
+    - start_steps: int
+    - alive: bool
+    - m_target: QColor
+    - m_obstacle: QColor
+}

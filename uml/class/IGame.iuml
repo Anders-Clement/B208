@@ -1,0 +1,8 @@
+abstract IGame {
+    --signals--
+    + setLED()
+    + setResistance()
+    --slots--
+    + {abstract} update(speed: int, weight: int, gameIdx: int, reset: bool)
+    + {abstract} start()
+}

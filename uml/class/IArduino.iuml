@@ -1,0 +1,7 @@
+abstract IArduino {
+    --slots--
+    + {abstract} setLED(index: int, r: int, g: int, b: int)
+    + {abstract} setResistance(int)
+    --signals--
+    + onData(speed: int, weight: int, gameIdx: int, reset: bool)
+}

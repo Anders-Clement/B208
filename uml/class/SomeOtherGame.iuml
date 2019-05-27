@@ -1,0 +1,4 @@
+class SomeOtherGame{
+    + start()
+    + update(speed: int, weight: int, gameIdx: int, reset: bool)
+}
