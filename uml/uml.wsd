@@ -1,5 +1,6 @@
 @startuml
 left to right direction
+skinparam dpi 300
 ' class QObject
 class main
 !include class/IGame.iuml
@@ -12,11 +13,6 @@ SomeOtherGame ..|> IGame
 
 !include class/IArduino.iuml
 
-'IArduino ..|> QObject
-
-IArduino <-- main
-IGame "3"<--"1" main
-WheelWidget <-- main
 !include class/ArduinoSerial.iuml
 
 !include class/FakeWheel.iuml
@@ -26,5 +22,7 @@ FakeWheel ..|> IArduino
 
 !include class/WheelWidget.iuml
 
-'WheelWidget ..|> QWidget
+IArduino "1" o-left- main
+IGame "3" o-right- main
+WheelWidget -down-> main
 @enduml
