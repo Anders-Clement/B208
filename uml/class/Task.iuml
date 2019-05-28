@@ -1,0 +1,12 @@
+interface Task {
+    + {abstract} canRun(now: uint32_t)
+    + {abstract} run(now: uint32_t)
+}
+
+abstract TimedTask {
+    + canRun(now: uint32_t)
+    + {abstract} run(now: uint32_t)
+    + incRunTime(_rate: uint32_t)
+    --
+
+}

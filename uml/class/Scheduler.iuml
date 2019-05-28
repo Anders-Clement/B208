@@ -1,0 +1,6 @@
+class Scheduler {
+    + run()
+    --
+    - tasks: Task**
+    - numOfTasks: uint8_t
+}

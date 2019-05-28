@@ -4,7 +4,6 @@ class ArduinoSerial {
     + handleReadyRead()
     --
     - m_port: QSerialPort*
-    - m_readData: QByteArray
     - m_timer: QTimer
     - buffer: QByteArray
 }

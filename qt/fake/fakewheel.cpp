@@ -2,7 +2,7 @@
 #include "ui_fakewheel.h"
 #include "wheelwidget.h"
 #include "map.h"
-#include"fakedial.h"
+#include "fakedial.h"
 
 
 FakeWheel::FakeWheel(QObject *parent) :

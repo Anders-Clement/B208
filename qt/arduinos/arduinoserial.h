@@ -18,7 +18,6 @@ public slots:
     void handleReadyRead();
 private:
     QSerialPort *m_port;
-    QByteArray m_readData;
     QTimer m_timer;
     QByteArray buffer;
 };

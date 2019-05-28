@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "wheelwidget.h"
-#include "arduinos/fakewheel.h"
+#include "fake/fakewheel.h"
 #include "arduinos/arduinoserial.h"
 #include "games/templerunner.h"
 #include "map.h"
@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     {
         QObject::connect(game, &IGame::setLED,
                          arduino, &IArduino::setLED);
+        QObject::connect(game, &IGame::setResistance,
+                         arduino, &IArduino::setResistance);
         game->start();
     }
 

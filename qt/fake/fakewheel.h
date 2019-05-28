@@ -2,8 +2,7 @@
 #define FAKEWHEEL_H
 
 #include <QWidget>
-#include <functional>
-#include "iarduino.h"
+#include "arduinos/iarduino.h"
 #include <QTimer>
 
 namespace Ui {
@@ -24,7 +23,7 @@ private:
     QWidget *m_widget;
     Ui::FakeWheel *ui;
     FakeValueDial *m_weight, *m_rpm;
-    int m_delay = 1000/20;
+    int m_delay = 1000/10;
     QTimer m_timer;
     std::vector<QWidget*> leds;
 };

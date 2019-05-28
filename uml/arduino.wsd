@@ -1,0 +1,43 @@
+
+@startuml
+skinparam dpi 300
+interface Task {
+    + {abstract} canRun(now: uint32_t)
+    + {abstract} run(now: uint32_t)
+}
+
+abstract TimedTask {
+    + canRun(now: uint32_t)
+    + {abstract} run(now: uint32_t)
+    + incRunTime(_rate: uint32_t)
+    + rate: uint32_t
+    --
+    - runTime: uint32_t
+}
+
+class Scheduler {
+    + run()
+    --
+    - tasks: Task**
+    - numOfTasks: uint8_t
+}
+
+class DataSender {
+    - msg: String
+    - pins: int*
+    + run(now: unit32_t)
+}
+
+class DataReciever {
+    - leds: GRGB
+    - led_pin: int
+    + run(now: unit32_t)
+    + canRun(now: unit32_t)
+}
+
+TimedTask --|> Task
+Scheduler -right-o Task
+
+DataReciever .down.|> TimedTask
+DataSender .left.|> TimedTask
+@enduml

@@ -1,7 +1,9 @@
 @startuml
 left to right direction
-skinparam dpi 300
+skinparam dpi 400
+
 ' class QObject
+' scale 470 width
 class main
 !include class/IGame.iuml
 'IGame ..|> QObject
@@ -24,5 +26,5 @@ FakeWheel ..|> IArduino
 
 IArduino "1" o-left- main
 IGame "3" o-right- main
-WheelWidget -down-> main
+WheelWidget "1" o-down- main
 @enduml
