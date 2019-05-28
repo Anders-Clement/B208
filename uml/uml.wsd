@@ -2,11 +2,9 @@
 left to right direction
 skinparam dpi 400
 
-' class QObject
-' scale 470 width
 class main
 !include class/IGame.iuml
-'IGame ..|> QObject
+
 !include class/TempleRunner.iuml
 !include class/SomeOtherGame.iuml
 
@@ -17,10 +15,7 @@ SomeOtherGame ..|> IGame
 
 !include class/ArduinoSerial.iuml
 
-!include class/FakeWheel.iuml
-
 ArduinoSerial ..|> IArduino
-FakeWheel ..|> IArduino
 
 !include class/WheelWidget.iuml
 

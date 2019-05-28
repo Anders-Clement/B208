@@ -1,6 +1,5 @@
 #include <QApplication>
 #include "wheelwidget.h"
-#include "fake/fakewheel.h"
 #include "arduinos/arduinoserial.h"
 #include "games/templerunner.h"
 #include "map.h"
@@ -15,10 +14,7 @@ int main(int argc, char *argv[])
     wheelWidget.weightGauge()->setLow(-1024);
     wheelWidget.weightGauge()->setHigh(1024);
 
-    bool fake = true; // change to false for real one
-    IArduino * arduino =
-            (!fake) ? (IArduino*)new ArduinoSerial("/dev/ttyACM0")
-                    : (IArduino*)new FakeWheel();
+    IArduino * arduino = new ArduinoSerial("/dev/ttyACM0");
 
 
     IGame *games[3] = {

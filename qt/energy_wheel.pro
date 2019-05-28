@@ -27,7 +27,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     wheelwidget.cpp \
-    fake/fakewheel.cpp \
     map.cpp\
     games/templerunner.cpp \
     arduinos/arduinoserial.cpp \
@@ -36,17 +35,13 @@ SOURCES += \
 
 HEADERS += \
     wheelwidget.h \
-    fake/fakewheel.h \
     map.h \
     arduinos/iarduino.h\
     games/templerunner.h \
     arduinos/arduinoserial.h \
-    fake/fakewheel.h \
-    fake/fakedial.h \
     games/igame.h
 
 FORMS += \
-    fake/fakewheel.ui \
     wheelwidget.ui
 
 # Default rules for deployment.
