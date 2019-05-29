@@ -3,6 +3,7 @@
 #include <QObject>
 #include <iostream>
 #include "time.h"
+#include "map.h"
 
 TempleRunner::TempleRunner(QColor target, QColor obstacle, QObject *parent):
     IGame(parent),
@@ -37,6 +38,7 @@ void TempleRunner::update(int position)
         if(stepsToObstacle <= 0)    // We are at an obstacle, check player pos, and update
         {
             GoalsReached++;
+
             stepsToObstacle = start_steps  - GoalsReached * 10;
 
             if(position == GreenPos) // Still alive, set new obstacle position:
@@ -53,7 +55,8 @@ void TempleRunner::update(int position)
         {
             stepsToObstacle--;
         }
-
+        std::cout << stepsToObstacle << std::endl;
+        auto dim = map(stepsToObstacle, 0, 100, 0, 255);
         //Update led's:
         for(int i = 0; i < 3; i++)
         {
@@ -61,8 +64,10 @@ void TempleRunner::update(int position)
                 for(int j = 0; j < 3; j++)
                 {
 //                    setLED(i*3 + j, 255 - stepsToObstacle*2, 0,0);
-                    auto dim = 255/(255 - stepsToObstacle*2);
-                    setLED(i*3 + j, m_obstacle.red()/dim, m_obstacle.green()/dim, m_obstacle.blue()/dim);
+//                    auto dim = 255/(255 - stepsToObstacle);
+
+
+                    setLED(i*3 + j, m_obstacle.red() - dim, m_obstacle.green() - dim, m_obstacle.blue()- dim);
                 }
             else
                 for(int j = 0; j < 3; j++)

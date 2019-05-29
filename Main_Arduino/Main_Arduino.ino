@@ -1,6 +1,6 @@
 #include "Scheduler.h"    //Scheduler class which runs tasks
 #include "DataSender.h"
-#include "DataReciever.h"
+#include "DataReceiver.h"
 #include "FastLED.h"
 
 #define NUM_LEDS 9
@@ -25,7 +25,7 @@ void loop() {
 
   int pins[] = {A0, A1, 9,10,11,12};
   DataSender ds(pins,now,50);
-  DataReciever dr(3, leds, now);
+  DataReceiver dr(3, leds, now);
   
   Task* tasks[] = {&ds, &dr}; //Add all tasks to an array, to feed to the scheduler 
   //More can be easily be added, as long as they inherit from Task

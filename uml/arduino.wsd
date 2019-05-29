@@ -25,19 +25,19 @@ class Scheduler {
 class DataSender {
     - msg: String
     - pins: int*
-    + run(now: unit32_t)
+    + run(now: uint32_t)
 }
 
-class DataReciever {
+class DataReceiver {
     - leds: GRGB
     - led_pin: int
-    + run(now: unit32_t)
-    + canRun(now: unit32_t)
+    + run(now: uint32_t)
+    + canRun(now: uint32_t)
 }
 
 TimedTask --|> Task
-Scheduler -right-o Task
+Scheduler "1" -up-> "0..*" Task
 
-DataReciever .down.|> TimedTask
-DataSender .left.|> TimedTask
+DataReceiver .down.|> Task
+DataSender .down.|> TimedTask
 @enduml

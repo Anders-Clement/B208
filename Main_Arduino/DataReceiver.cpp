@@ -1,11 +1,11 @@
-#include "DataReciever.h"
+#include "DataReceiver.h"
 
-DataReciever::DataReciever(uint8_t _led_pin, CRGB* _leds, uint32_t _now) : led_pin(_led_pin), leds(_leds)
+DataReceiver::DataReceiver(uint8_t _led_pin, CRGB* _leds, uint32_t _now) : led_pin(_led_pin), leds(_leds)
 {
   pinMode(led_pin, OUTPUT);
 }
 
-bool DataReciever::canRun(uint32_t now)
+bool DataReceiver::canRun(uint32_t now)
 {
   if (Serial.available())
     return true;
@@ -13,7 +13,7 @@ bool DataReciever::canRun(uint32_t now)
     return false;
 }
 
-void DataReciever::run(uint32_t now)
+void DataReceiver::run(uint32_t now)
 {
   char in;
   String input = "";
