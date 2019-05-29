@@ -1,12 +1,13 @@
-#ifndef WHEELWIDGET_H
-#define WHEELWIDGET_H
+#include <QGraphicsEllipseItem>
 
-#include <QWidget>
-#include <QGraphicsScene>
+#ifndef GAUGE_H
+#define GAUGE_H
 
-namespace Ui {
-class WheelWidget;
-}
+class ArcGraphicsItem : public QGraphicsEllipseItem
+{
+public:
+    void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget) override;
+};
 
 class Gauge : public QObject
 {
@@ -32,33 +33,4 @@ protected:
     qreal m_low=0., m_high=0., m_value=0.;
 };
 
-class RPMGauge : public Gauge
-{
-    Q_OBJECT
-public:
-    explicit RPMGauge(QRect gaugeRect, QPoint textPos, QColor color, QGraphicsScene *scene, QString prefix, QObject *parent=nullptr);
-
-    void setValue(qreal) override;
-private:
-    static QGraphicsEllipseItem *initEllipse(QRect rect, QColor color, QGraphicsScene *scene);
-    qreal frameDelay = 0.016;
-    qreal currentRotation;
-    QTimer *rotateTimer;
-};
-
-class WheelWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit WheelWidget(QWidget *parent = nullptr);
-    ~WheelWidget();
-
-    Gauge *weightGauge();
-    Gauge *rpmGauge();
-private:
-    Ui::WheelWidget *ui;
-    QGraphicsScene *graphicsScene;
-    Gauge *m_weightGauge, *m_rpmGauge;
-};
-
-#endif // WHEELWIDGET_H
+#endif /* !GAUGE_H */

@@ -9,7 +9,7 @@ class TempleRunner {
     - alive: bool
     - m_target: QColor
     - m_obstacle: QColor
-    - update(position)
+    - update(position: int)
     + start()
     + update(speed: int, weight: int, gameIdx: int, reset: bool)    
 }

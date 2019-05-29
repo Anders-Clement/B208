@@ -36,9 +36,9 @@ class DataReceiver {
     + canRun(now: uint32_t)
 }
 
-TimedTask --|> Task
-Scheduler "1" -up-> "0..*" Task
+TimedTask ..|> Task
+Scheduler o-up-> "0..*" Task
 
 DataReceiver .down.|> Task
-DataSender .down.|> TimedTask
+DataSender -down-|> TimedTask
 @enduml

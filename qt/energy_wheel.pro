@@ -26,7 +26,9 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    wheelwidget.cpp \
+    wheelwidget/wheelwidget.cpp \
+    wheelwidget/gauge.cpp \
+    wheelwidget/rpmgauge.cpp \
     map.cpp\
     games/templerunner.cpp \
     arduinos/arduinoserial.cpp \
@@ -34,7 +36,9 @@ SOURCES += \
     games/igame.cpp
 
 HEADERS += \
-    wheelwidget.h \
+    wheelwidget/wheelwidget.h \
+    wheelwidget/gauge.h \
+    wheelwidget/rpmgauge.h \
     map.h \
     arduinos/iarduino.h\
     games/templerunner.h \
@@ -42,7 +46,7 @@ HEADERS += \
     games/igame.h
 
 FORMS += \
-    wheelwidget.ui
+    wheelwidget/wheelwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

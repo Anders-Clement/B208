@@ -4,8 +4,6 @@
 #include <QColor>
 #include "igame.h"
 
-class IArduino;
-
 class TempleRunner : public IGame
 {
     Q_OBJECT

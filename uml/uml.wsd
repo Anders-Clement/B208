@@ -8,18 +8,19 @@ class main
 !include class/TempleRunner.iuml
 !include class/SomeOtherGame.iuml
 
-TempleRunner ..|> IGame
-SomeOtherGame ..|> IGame
+TempleRunner --|> IGame
+SomeOtherGame --|> IGame
 
 !include class/IArduino.iuml
 
 !include class/ArduinoSerial.iuml
 
-ArduinoSerial ..|> IArduino
+ArduinoSerial --|> IArduino
 
 !include class/WheelWidget.iuml
 
-IArduino "1" o-left- main
-IGame "3" o-right- main
-WheelWidget "1" o-down- main
+main *-right->"1" IArduino
+main *-up->"1" WheelWidget
+main *-left->"3" IGame
+
 @enduml

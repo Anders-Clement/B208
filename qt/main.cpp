@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "wheelwidget.h"
+#include "wheelwidget/wheelwidget.h"
 #include "arduinos/arduinoserial.h"
 #include "games/templerunner.h"
 #include "map.h"
