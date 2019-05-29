@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 
     for (IGame *game : games)
     {
-        QObject::connect(game, &IGame::setLED,
-                         arduino, &IArduino::setLED);
+        QObject::connect(game, &IGame::setLED, // signal
+                         arduino, &IArduino::setLED); // slot
         QObject::connect(game, &IGame::setResistance,
                          arduino, &IArduino::setResistance);
         game->start();
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     int oldSwitchState = 0;
     QObject::connect(arduino, &IArduino::onData,
-                     [&](int speed, int weight, int switchState, bool reset){
+                     [&oldSwitchState, &games](int speed, int weight, int switchState, bool reset){
                               if (reset || oldSwitchState != switchState)
                               {
                                   games[switchState]->start();
