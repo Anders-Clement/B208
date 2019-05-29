@@ -1,25 +1,26 @@
 
 @startuml
 skinparam dpi 300
+
+' skinparam ClassAttributeIconSize 0
+
 interface Task {
     + {abstract} canRun(now: uint32_t)
     + {abstract} run(now: uint32_t)
 }
 
 abstract TimedTask {
+    + rate: uint32_t
+    - runTime: uint32_t
     + canRun(now: uint32_t)
     + {abstract} run(now: uint32_t)
     + incRunTime(_rate: uint32_t)
-    + rate: uint32_t
-    --
-    - runTime: uint32_t
 }
 
 class Scheduler {
-    + run()
-    --
     - tasks: Task**
     - numOfTasks: uint8_t
+    + run()
 }
 
 class DataSender {

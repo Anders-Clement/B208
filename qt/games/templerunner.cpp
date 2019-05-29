@@ -55,19 +55,17 @@ void TempleRunner::update(int position)
         {
             stepsToObstacle--;
         }
-        std::cout << stepsToObstacle << std::endl;
-        auto dim = map(stepsToObstacle, 0, 100, 0, 255);
+        auto current_max = 100;
+        auto r = map(stepsToObstacle, 0, current_max, 0, m_obstacle.red());
+        auto g = map(stepsToObstacle, 0, current_max, 0, m_obstacle.green());
+        auto b = map(stepsToObstacle, 0, current_max, 0, m_obstacle.blue());
         //Update led's:
         for(int i = 0; i < 3; i++)
         {
             if(i != GreenPos)
                 for(int j = 0; j < 3; j++)
                 {
-//                    setLED(i*3 + j, 255 - stepsToObstacle*2, 0,0);
-//                    auto dim = 255/(255 - stepsToObstacle);
-
-
-                    setLED(i*3 + j, m_obstacle.red() - dim, m_obstacle.green() - dim, m_obstacle.blue()- dim);
+                    setLED(i*3 + j, r, g, b);
                 }
             else
                 for(int j = 0; j < 3; j++)

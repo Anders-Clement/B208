@@ -1,9 +1,8 @@
 class ArduinoSerial {
-    + setLED(index: int, r: int, g: int, b: int)
-    + setResistance(int)
-    + handleReadyRead()
-    --
     - m_port: QSerialPort*
     - m_timer: QTimer
     - buffer: QByteArray
+    + setLED(index: int, r: int, g: int, b: int)
+    + setResistance(int)
+    + handleReadyRead()
 }
