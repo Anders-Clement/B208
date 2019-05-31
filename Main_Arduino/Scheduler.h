@@ -12,7 +12,7 @@ public:
   Scheduler(Task** tasks, uint8_t _numOfTasks);
   void run();
 private:
-  Task** tasks;
+  Task** tasks;  //an array of pointers to tasks
   uint8_t numOfTasks;
 };
 

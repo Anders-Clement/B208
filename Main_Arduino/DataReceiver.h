@@ -5,9 +5,8 @@
 
 class DataReceiver : public Task
 {
-  CRGB* leds;
+  CRGB* leds; 
   int led_pin;
-  
 
   public:
     DataReceiver(uint8_t _led_pin, CRGB* _leds, uint32_t _now);

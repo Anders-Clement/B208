@@ -22,7 +22,7 @@ public:
   TimedTask(uint32_t _now, uint32_t _rate);
   virtual bool canRun(uint32_t now);
   virtual void run(uint32_t now) =0;
-  void incRunTime(uint32_t _rate);
+  void incRunTime(uint32_t _rate);  //method to increment the runtime (next point in time at which the task can run)
   uint32_t rate;
 
 private:

@@ -12,17 +12,17 @@ void Scheduler::run()
 {
   while(true) //Never stop running tasks
   {
-    Task** tpp = tasks;
-    uint32_t now = millis();
-    for(uint8_t i = 0; i < numOfTasks; i++)
+    Task** tpp = tasks; //tpp is a copy of the array of tasks
+    uint32_t now = millis();  //get current time
+    for(uint8_t i = 0; i < numOfTasks; i++) //loop through all tasks. If it can run, then run it
     {
-      Task* tp = *tpp;
-      if(tp->canRun(now))
+      Task* tp = *tpp;  //dereference tpp, to get a pointer to a task (tp)
+      if(tp->canRun(now)) //can tp run? if tp->canRun(now) returns true, then it should be run
       {
         tp->run(now);
         //break; //break to ensure prioritization, can be removed if prioritazation is not required.
       }
-      tpp++;
+      tpp++;  //increment tpp to point to the next task in the array of tasks
     }
   }
 }

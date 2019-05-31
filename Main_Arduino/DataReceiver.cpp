@@ -7,21 +7,21 @@ DataReceiver::DataReceiver(uint8_t _led_pin, CRGB* _leds, uint32_t _now) : led_p
 
 bool DataReceiver::canRun(uint32_t now)
 {
-  if (Serial.available())
+  if (Serial.available()) //This task should run if there is data to recieve
     return true;
   else
     return false;
 }
 
-void DataReceiver::run(uint32_t now)
+void DataReceiver::run(uint32_t now)  //will be run by the scheduler when canRun (right above) returns true
 {
-  char in;
+  char in;            //variables to hold input from Serial
   String input = "";
 
-  in = Serial.read();
-  if (in == '#')
+  in = Serial.read(); //Read a byte
+  if (in == '#')  //If the read byte is a '#' we are at the start of a message. 
   {
-    while (in != '!')
+    while (in != '!') // Keep reeding, until an '!' is received:
     {
       if (Serial.available())
       {
@@ -36,7 +36,7 @@ void DataReceiver::run(uint32_t now)
       int led_data[4];
       String data = "";
 
-      while (input[i] != '!')
+      while (input[i] != '!') //Loop through the message, and store the recieved int's in the led_data array
       {
         if (input[i] != ',')
           data += input[i];
@@ -49,20 +49,20 @@ void DataReceiver::run(uint32_t now)
         i++;
       }
 
-      leds[led_data[0]].setRGB(led_data[1], led_data[2], led_data[3]);
-      FastLED.show();
+      leds[led_data[0]].setRGB(led_data[1], led_data[2], led_data[3]);  //and set the LED
+      FastLED.show(); //updating the LED strip
 
     }
     else if (input[0] == '2') //Resistor LED command
     {
       String data = "";
       int i = 2;
-      while (input[i] != ',')
+      while (input[i] != ',')//read the int:
       {
         data += input[i];
         i++;
       }
-      analogWrite(led_pin, 255 - data.toInt());
+      analogWrite(led_pin, 255 - data.toInt()); //and update the LED
     }
   }
 }
