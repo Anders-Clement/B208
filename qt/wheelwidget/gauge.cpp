@@ -5,7 +5,11 @@
 
 Gauge::Gauge(QRect gaugeRect, QPoint textPos, QColor color, QGraphicsScene *scene, QString prefix, QObject *parent):
     Gauge(initEllipse(gaugeRect, color, scene), initText(textPos, color, scene), prefix, parent)
-{}
+{} 
+/* 
+ Constructor which just invokes another constructor, and forwards some args to to static initXXX methods
+  that are listed below.
+ */
 Gauge::Gauge(QGraphicsEllipseItem *ellipse, QGraphicsSimpleTextItem *text, QString prefix, QObject *parent):
     QObject(parent), m_ellipse(ellipse), m_text(text), prefix(prefix)
 {}
@@ -27,14 +31,20 @@ qreal Gauge::value() const
 
 QGraphicsEllipseItem * Gauge::initEllipse(QRect rect, QColor color, QGraphicsScene *scene)
 {
+    /* 
+     Some boilerplate code for setting up ArcGraphicsItem
+     */
     auto ellipse = new ArcGraphicsItem();
-    scene->addItem(ellipse);
+    scene->addItem(ellipse); 
+    // In order for graphicsItem to be drawn it needs to be added to the scene
+    // which itself is the part of the graphicsView
     QPen pen;
     pen.setWidth(10);
     pen.setColor(color);
     ellipse->setPen(pen);
     ellipse->setRect(rect);
-    ellipse->setStartAngle(90*16);
+    ellipse->setStartAngle(90*16); 
+    // 90 degrees time 16 cuz Qt accepts accepts integer where 16 units is one degree
     return ellipse;
 }
 

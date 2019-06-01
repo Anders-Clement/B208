@@ -7,6 +7,9 @@
 
 class ArduinoSerial : public IArduino
 {
+    /*
+     Implements the serial communication with the prototype
+     */
     Q_OBJECT
 public:
     ArduinoSerial(QSerialPort *port);

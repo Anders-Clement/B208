@@ -10,6 +10,9 @@ class WheelWidget;
 
 class WheelWidget : public QWidget
 {
+    /*
+     The widget that has two gauges see gauge.h
+     */
     Q_OBJECT
 public:
     explicit WheelWidget(QWidget *parent = nullptr);
